@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>SAT Calculator</title>
+  <link rel="stylesheet" href="style.css">
+  <script>
+  //Funcs
+  function setError(id) {
+    if(id == "reading-incorrect" || id == "writing-incorrect" || id == "math-incorrect" || id == "essay-score") {
+      document.getElementById(id).style = "margin-top:2.5%;border:1px solid #DD4B39";
+    }
+    else {
+      document.getElementById(id).style = "border:1px solid #DD4B39";
+    }
+  }
+  function setoutError(id) {
+    if(id == "reading-incorrect" || id == "writing-incorrect" || id == "math-incorrect" || id == "essay-score") {
+      document.getElementById(id).style = "margin-top:2.5%";
+    }
+    else {
+      document.getElementById(id).style = "";
+    }
+  }
+  function getValue(id) {
+    return document.getElementById(id).value;
+  }
+  function rawScore(c,i) {
+    return (getValue(c) - 0.25 * getValue(i)).toFixed();
+  }
+  //
+  function check(el) {
+    if(isNaN(el.value)) {
+      setError(el.id);
+    }
+    else {
+      setoutError(el.id);
+    }
+  }
+  function calculate() {
+    var math_score = rawScore("math-correct" , "math-incorrect");
+    var reading_score = rawScore("reading-correct" , "reading-incorrect");
+    var writing_score = rawScore("writing-correct" , "writing-incorrect");
+    var essay_score = getValue("essay-score");
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange=function() {
+      if(xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+        //alert(xmlhttp.responseText);
+        var res = xmlhttp.responseText.split("-");
+        document.getElementById("result").textContent =  "Critical Reading : " + res[0] + "\n"+ "Math : "+ res[1] + "\n" + "Writing : " + res[2] + "\n" + "Total : " + (parseInt(res[0]) + parseInt(res[1]) + parseInt(res[2]));
+      }
+    }
+    xmlhttp.open("GET" , "read.php?math_score=" + math_score + "&reading_score=" + reading_score + "&writing_score=" + writing_score + "&essay_score="+essay_score);
+    xmlhttp.send();
+  }
+  </script>
+</head>
+
+<body>
+  <fieldset>
+    <center>
+    <legend>Critical Reading </legend>
+    <input id="reading-correct" type="text" placeholder="Corrects" onkeyup="check(this)" /> <br>
+    <input id="reading-incorrect" type="text" placeholder="Incorrects" onkeyup="check(this)" style="margin-top:2.5%" /> <br>
+    </center>
+  </fieldset>
+  <fieldset>
+    <center>
+    <legend>Math</legend>
+    <input id="math-correct" type="text" placeholder="Corrects" onkeyup="check(this)" /><br>
+    <input id="math-incorrect" type="text" placeholder="Incorrects" onkeyup="check(this)" style="margin-top:2.5%" /><br>
+    </center>
+  </fieldset>
+  <fieldset>
+    <center>
+    <legend>Writing</legend>
+    <input id="writing-correct" type="text" placeholder="Corrects" onkeyup="check(this)" /><br>
+    <input id="writing-incorrect" type="text" placeholder="Incorrects" onkeyup="check(this)" style="margin-top:2.5%" /><br>
+    <input id="essay-score" type="text" placeholder="Essay Score" onkeyup="check(this)" style="margin-top:2.5%" /> <br>
+    </center>
+  </fieldset> <br>
+  <center>
+    <button class="action" onclick="calculate()">Calculate</button>
+  </center>
+  <br>
+  <textarea id="result" rows="5" style="width:100%" placeholder="Score will be displayed here"></textarea>
+  <span class="bold" style="float:right">Made with &#10084; for Logos &copy; GiORg1</span>
+</body>
+</html>
