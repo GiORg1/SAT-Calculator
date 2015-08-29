@@ -18,9 +18,9 @@ $resultReading = $conn->query("SELECT scaled_score from reading WHERE raw_score=
 $resultWriting = $conn->query("SELECT scaled_score from writing WHERE raw_score='$writingRawScore' and essay_score='$writingEssayScore'");
 
 if($resultReading->num_rows >0) {
-	while($row = $resultReading-> fetch_assoc()) {
-    echo $row["scaled_score"]. "-";
-	}
+   while($row = $resultReading-> fetch_assoc()) {
+     echo $row["scaled_score"]. "-";
+   }
 }
 if ($resultMath->num_rows > 0) {
     while($row = $resultMath-> fetch_assoc()) {
@@ -28,9 +28,9 @@ if ($resultMath->num_rows > 0) {
     }
 }
 if($resultWriting->num_rows >0) {
-	while($row = $resultWriting-> fetch_assoc()) {
-    echo $row["scaled_score"];
-	}
+   while($row = $resultWriting-> fetch_assoc()) {
+     echo $row["scaled_score"];
+   }
 }
 $conn->close();
 ?>
